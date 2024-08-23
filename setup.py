@@ -61,10 +61,10 @@ class build_ext(build_ext_orig):
 
 
 setup(
-    name="xapian-bindings",
+    name="xapian-bindings-binary",
     version=VERSION,
     description="A short description of your package",
-    author="xapian-bindings dev",
+    author="xapian-bindings-binary dev",
     packages=["xapian"],
     ext_modules=[Extension("xapian", [])],
     cmdclass={"build_ext": build_ext},

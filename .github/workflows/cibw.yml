@@ -22,7 +22,7 @@ jobs:
           )
           echo "include=$MATRIX" >> $GITHUB_OUTPUT          
     env:
-      CIBW_ARCHS_LINUX: x86_64 aarch64
+      CIBW_ARCHS_LINUX: x86_64
       CIBW_SKIP: pp* cp36* cp37*
   build_wheels:
     name: Build ${{ matrix.only }}
@@ -57,7 +57,7 @@ jobs:
     permissions:
       id-token: write
     runs-on: ubuntu-latest
-    if: github.event_name == 'release' && github.event.action == 'published'
+    if: github.event_name == 'release'
     steps:
     - uses: actions/download-artifact@v4
       with:
