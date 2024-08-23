@@ -17,6 +17,7 @@ jobs:
         uses: pypa/cibuildwheel@v2.20.0
         env:
           CIBW_BUILD: cp*x86_64 cp*aarch64
+          CIBW_SKIP: cp36* cp37*
         # with:
         #   package-dir: .
         #   output-dir: wheelhouse
