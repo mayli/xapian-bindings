@@ -1,6 +1,12 @@
 name: Build
 
 on:
+  workflow_dispatch:
+    inputs:
+      publish:
+        description: Write 'PUBLISH' to publish to pypi.
+      publish_test:
+        description: Write 'PUBLISH_TEST' to publish to pypi.
   push:
   pull_request:
   release:
@@ -56,12 +62,12 @@ jobs:
           name: cibw-wheels-${{ matrix.os }}-${{ strategy.job-index }}
           path: ./wheelhouse/*.whl
   upload_all:
-    needs: [build_wheels]
+    needs: build_wheels
     environment: pypi
     permissions:
       id-token: write
     runs-on: ubuntu-latest
-    if: github.event_name == 'release'
+    if: needs.build_wheels.result == 'success' && github.event.inputs.publish == 'PUBLISH'
     steps:
     - uses: actions/download-artifact@v4
       with:
@@ -70,3 +76,22 @@ jobs:
         merge-multiple: true
 
     - uses: pypa/gh-action-pypi-publish@release/v1
+  upload_pypi_test:
+    needs: build_wheels
+    environment: pypitest
+    permissions:
+      id-token: write
+    runs-on: ubuntu-latest
+    if: needs.build_wheels.result == 'success' && github.event.inputs.publish_test == 'PUBLISH_TEST'
+
+    steps:
+    - uses: actions/download-artifact@v4
+      with:
+        pattern: cibw-*
+        path: dist
+        merge-multiple: true
+
+    - uses: pypa/gh-action-pypi-publish@release/v1
+      with:
+        skip_existing: true
+        repository_url: https://test.pypi.org/legacy/
