@@ -26,7 +26,7 @@ jobs:
         run: |
           MATRIX=$(
             {
-              cibuildwheel --print-build-identifiers --platform linux \
+              cibuildwheel --print-build-identifiers --platform linux --archs auto64,aarch64 \
               | jq -nRc '{"only": inputs, "os": "ubuntu-latest"}'
             } | jq -sc
           )
