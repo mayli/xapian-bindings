@@ -1,3 +1,4 @@
+import os
 import shutil
 import venv
 from pathlib import Path
@@ -59,11 +60,17 @@ class build_ext(build_ext_orig):
             shutil.rmtree(target)
         shutil.copytree(src, target)
 
+def read_readme():
+    with open(os.path.join(os.path.dirname(__file__), 'README.md'), encoding='utf-8') as f:
+        return f.read()
 
 setup(
-    name="xapian-bindings",
+    name="xapian-bindings-binary",
     version=VERSION,
-    description="A short description of your package",
+    description="xapian bindings binary builds",
+    long_description=read_readme(),
+    long_description_content_type='text/markdown',
+    url='https://github.com/mayli/xapian-bindings/',
     author="xapian-bindings dev",
     packages=["xapian"],
     ext_modules=[Extension("xapian", [])],
